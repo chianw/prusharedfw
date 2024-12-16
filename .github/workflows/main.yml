@@ -1,4 +1,4 @@
-name: Run Azure Login with OIDC
+name: Deploy Azure Firewall with Terraform
 on:
   workflow_dispatch:
 
@@ -30,13 +30,12 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.10.2
-          
-      - name: Deploy via Terraform
+
+      - name: Terraform init
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_USE_OIDC: true
         run: |
           terraform init
-          terraform plan
-          terraform apply -auto-approve
