@@ -48,7 +48,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
       name                = "nat_rule_collection1_rule1"
       protocols           = ["TCP", "UDP"]
       source_addresses    = ["10.0.0.1", "10.0.0.2"]
-      destination_address = "192.168.1.1"
+      destination_address = azurerm_public_ip.example.ip_address
       destination_ports   = ["80"]
       translated_address  = "192.168.0.1"
       translated_port     = "8080"

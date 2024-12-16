@@ -49,7 +49,7 @@ jobs:
         run: |
           terraform plan -out apply.tfplan
     
-      - name: Terraform plan
+      - name: Terraform apply
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
