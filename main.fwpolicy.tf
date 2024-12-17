@@ -34,7 +34,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
     rule {
       name                  = "network_rule_collection1_rule1"
       protocols             = ["TCP", "UDP"]
-      source_addresses      = ["10.0.0.3"]
+      source_addresses      = ["10.0.0.4"]
       destination_addresses = ["192.168.1.1", "192.168.1.2"]
       destination_ports     = ["80", "1000-2000"]
     }
