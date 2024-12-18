@@ -28,7 +28,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
         type = "Https"
         port = 443
       }
-      source_addresses  = ["10.0.0.7"]
+      source_addresses  = ["10.0.0.8"]
       destination_fqdns = ["*.microsoft.com"]
     }
   }
