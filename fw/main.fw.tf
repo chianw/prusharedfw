@@ -25,6 +25,12 @@ resource "azurerm_public_ip" "example" {
   sku                 = "Standard"
 }
 
+resource "azurerm_firewall_policy" "example" {
+  name                = "pru-fwpolicy"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+}
+
 resource "azurerm_firewall" "example" {
   name                = "prufirewall"
   location            = azurerm_resource_group.example.location

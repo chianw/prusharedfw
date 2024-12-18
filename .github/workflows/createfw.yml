@@ -39,6 +39,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
+          cd fw
           terraform init
 
       - name: Terraform plan
@@ -48,6 +49,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
+          cd fw
           terraform plan -out apply.tfplan
     
       - name: Terraform apply
@@ -57,5 +59,6 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
-            terraform apply apply.tfplan
+          cd fw
+          terraform apply apply.tfplan
   
