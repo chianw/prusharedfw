@@ -36,13 +36,14 @@ jobs:
         with:
           terraform_version: 1.10.2
 
-      - name: Terraform init
+      - name: LBU1 Terraform init
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
+          cd lbu1
           terraform init
 
       - name: LBU1 Terraform plan
@@ -64,7 +65,17 @@ jobs:
         run: |
           cd lbu1
           terraform apply destroy.tfplan
-  
+
+      - name: LBU2 Terraform init
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_USE_OIDC: true
+        run: |
+          cd lbu2
+          terraform init
+          
       - name: LBU2 Terraform plan
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
