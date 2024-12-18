@@ -1,19 +1,25 @@
-resource "azurerm_firewall_policy" "example" {
-  name                = "pru-fwpolicy"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+data "terraform_remote_state" "prufwtfstate" {
+  backend = "azurerm"
+  config = {
+    resource_group_name  = "prutfstaterg"
+    storage_account_name = "prutfstatesa123"
+    container_name       = "tfstate"
+    key                  = "prufw.tfstate"
+  }
 }
 
+
+
 resource "azurerm_firewall_policy_rule_collection_group" "example" {
-  name               = "pru-fwpolicy-rcg"
-  firewall_policy_id = azurerm_firewall_policy.example.id
+  name               = "lbu1-fwpolicy-rcg"
+  firewall_policy_id = data.terraform_remote_state.prufwtfstate.outputs.azurerm_firewall_policy_id
   priority           = 500
   application_rule_collection {
-    name     = "app_rule_collection1"
+    name     = "lbu1app_rule_collection1"
     priority = 500
     action   = "Deny"
     rule {
-      name = "app_rule_collection1_rule1"
+      name = "lbu1app_rule_collection1_rule1"
       protocols {
         type = "Http"
         port = 80
@@ -28,11 +34,11 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
   }
 
   network_rule_collection {
-    name     = "network_rule_collection1"
+    name     = "lbu1network_rule_collection1"
     priority = 400
     action   = "Deny"
     rule {
-      name                  = "network_rule_collection1_rule1"
+      name                  = "lbu1network_rule_collection1_rule1"
       protocols             = ["TCP", "UDP"]
       source_addresses      = ["10.0.0.5"]
       destination_addresses = ["192.168.1.1", "192.168.1.2"]
@@ -41,14 +47,14 @@ resource "azurerm_firewall_policy_rule_collection_group" "example" {
   }
 
   nat_rule_collection {
-    name     = "nat_rule_collection1"
+    name     = "lbu1nat_rule_collection1"
     priority = 300
     action   = "Dnat"
     rule {
-      name                = "nat_rule_collection1_rule1"
+      name                = "lbu1nat_rule_collection1_rule1"
       protocols           = ["TCP", "UDP"]
       source_addresses    = ["10.0.0.1", "10.0.0.2"]
-      destination_address = azurerm_public_ip.example.ip_address
+      destination_address = data.terraform_remote_state.prufwtfstate.outputs.azurerm_public_ip_address
       destination_ports   = ["80"]
       translated_address  = "192.168.0.1"
       translated_port     = "8080"

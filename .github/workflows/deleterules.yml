@@ -1,4 +1,8 @@
-name: Destroy Azure Firewall with Terraform
+name: Delete Azure Firewall rules with Terraform
+# on:
+#   pull_request:
+#     branches:
+#       - main
 on:
   workflow_dispatch:
 
@@ -6,7 +10,7 @@ permissions:
   id-token: write
   contents: read
 jobs:
-  destroy-afw:
+  delete-fw-rules:
     environment: dev
     runs-on: ubuntu-latest
     steps:
@@ -39,26 +43,44 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
-          cd fw
           terraform init
 
-      - name: Terraform plan
+      - name: LBU1 Terraform plan
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
-          cd fw
+          cd lbu1
           terraform plan -destroy -out destroy.tfplan
     
-      - name: Terraform apply
+      - name: LBU1 Terraform destroy
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           ARM_USE_OIDC: true
         run: |
-          cd fw
+          cd lbu1
           terraform apply destroy.tfplan
   
+      - name: LBU2 Terraform plan
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_USE_OIDC: true
+        run: |
+          cd lbu2
+          terraform plan -destroy -out destroy.tfplan
+    
+      - name: LBU2 Terraform destroy
+        env:
+          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          ARM_USE_OIDC: true
+        run: |
+          cd lbu2
+          terraform apply destroy.tfplan          
